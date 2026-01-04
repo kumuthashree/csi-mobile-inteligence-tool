@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mobile Number Intelligence Tool</title>
+    <style>
+        body { font-family: Arial; background-color: #eef2f3; }
+        .container {
+            width: 450px; margin: 100px auto; background: white;
+            padding: 20px; border-radius: 10px; box-shadow: 0 0 10px gray;
+        }
+        input, button { width: 100%; padding: 10px; margin-top: 10px; }
+        table { width: 100%; margin-top: 20px; border-collapse: collapse; }
+        th, td { border: 1px solid black; padding: 8px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 align="center">Mobile Number Intelligence Tool</h2>
+
+    <input type="text" id="mobile" placeholder="Enter 10-digit mobile number">
+    <button onclick="checkNumber()">Check Details</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+    // Prefix database (first 5 digits -> operator + circle)
+    const prefixDatabase = {
+        "98765": { operator: "Jio", circle: "Maharashtra" },
+        "91234": { operator: "Airtel", circle: "Tamil Nadu" },
+        "99887": { operator: "BSNL", circle: "Kerala" },
+        "95661": { operator: "VI", circle: "Karnataka" },
+        "90001": { operator: "Airtel", circle: "Delhi" },
+        "94001": { operator: "BSNL", circle: "Tamil Nadu" },
+        "96001": { operator: "VI", circle: "Andhra Pradesh" },
+        "70101": { operator: "Jio", circle: "Karnataka" }
+    };
+
+    function checkNumber() {
+        let mobile = document.getElementById("mobile").value.trim();
+        let resultDiv = document.getElementById("result");
+
+        // Validate input
+        if (mobile.length !== 10 || isNaN(mobile)) {
+            resultDiv.innerHTML = "<p style='color:red;'>Invalid mobile number</p>";
+            return;
+        }
+
+        // Extract first 5 digits from user input automatically
+        let prefix = mobile.substring(0, 5);
+
+        let operator = "Unknown";
+        let circle = "Unknown";
+
+        // Lookup in prefix database
+        if (prefixDatabase[prefix]) {
+            operator = prefixDatabase[prefix].operator;
+            circle = prefixDatabase[prefix].circle;
+        }
+
+        // Display output
+        resultDiv.innerHTML = `
+            <table>
+                <tr>
+                    <th>Mobile Number</th>
+                    <th>Operator</th>
+                    <th>Circle</th>
+                </tr>
+                <tr>
+                    <td>${mobile}</td>
+                    <td>${operator}</td>
+                    <td>${circle}</td>
+                </tr>
+            </table>
+        `;
+    }
+</script>
+
+</body>
+</html>
